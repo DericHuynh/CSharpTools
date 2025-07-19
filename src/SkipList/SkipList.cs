@@ -49,7 +49,7 @@ namespace SkipList
         /// The probability of a node being promoted to the next level.
         /// This value affects the structure of the skip list and its performance characteristics.
         /// </summary>
-        private const double PROBABILITY = 0.1;
+        private const double PROBABILITY = 0.2;
 
         /// <summary>
         /// Tracks modifications to the list to support consistent iteration.
@@ -84,7 +84,7 @@ namespace SkipList
         /// Gets or sets the maximum number of levels in the skip list.
         /// This affects the memory usage and performance characteristics of the data structure.
         /// </summary>
-        public int MaxLevel { get; private set; } = 2;
+        public int MaxLevel { get; private set; } = 4;
 
         /// <summary>
         /// Gets the number of elements in the skip list.
