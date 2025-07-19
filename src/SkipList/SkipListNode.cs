@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SkipList.Generic
 {
-    public sealed class SkipListNode<T>
+    [DebuggerDisplay("{Value}")]
+    [Serializable]
+    public sealed class SkipListNode<T> where T : IComparable<T>
     {
         public T Value { get; init; }
         public SkipListNode<T>[] ForwardNodes { get; init; }

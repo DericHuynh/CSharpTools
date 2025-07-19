@@ -1,6 +1,7 @@
 ﻿using SkipList.Generic;
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Net;
 using System.Reflection;
@@ -11,6 +12,9 @@ using System.Threading;
 
 namespace SkipList
 {
+    [DebuggerTypeProxy(typeof(SkipList.SkipListDebugView<>))]
+    [DebuggerDisplay("Count = {Count}")]
+    [Serializable]
     public sealed class SkipList<T> : ISerializable, IDeserializationCallback, IList<T>, IList, IReadOnlyList<T> where T : IComparable<T>
     {
         private const int MAX_LEVEL = 6;
@@ -20,7 +24,9 @@ namespace SkipList
         private int _currentMaxLevel { get; set; }
         private Random _random { get; init; }
         private SkipListNode<T> _head { get; set; }
-        private SerializationInfo? _siInfo; //A temporary variable which we need during deserialization.
+
+        //A temporary variable which we need during deserialization.
+        private SerializationInfo? _siInfo; 
         
         // names for serialization
         private const string VersionName = "Version"; // Do not rename (binary serialization)
@@ -36,8 +42,8 @@ namespace SkipList
             Initialize();
         }
 
-        public T this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        object? IList.this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public T this[int index] { get => GetItem(index); set => throw new NotSupportedException(); }
+        object? IList.this[int index] { get => this[index]; set => throw new NotSupportedException(); }
 
         public int Count => _count;
 
@@ -59,6 +65,22 @@ namespace SkipList
             {
                 _head.ForwardNodes[i] = _head;
             }
+
+        }
+
+        private T GetItem(int index)
+        {
+            SkipListNode<T> currentNode = _head;
+
+            if(index < 0 || index >= _count)
+                throw new ArgumentOutOfRangeException("Indexing has to be within range of the list.");
+
+            for (int i = 0; i <= index; i++)
+            {
+                currentNode = currentNode.ForwardNodes[0];
+            }
+
+            return currentNode.Value;
         }
 
         public void Add(T item)
@@ -282,14 +304,14 @@ namespace SkipList
 
         public void Insert(int index, T item)
         {
-            Add(item);
+            throw new NotSupportedException(); //Can't insert at index when this is a sorted list
         }
 
         public void Insert(int index, object? value)
         {
             if(value is T item)
             {
-                Add(item);
+                Insert(index, item);
             }
         }
 
@@ -355,13 +377,6 @@ namespace SkipList
             return GetEnumerator();
         }
 
-        /// <summary>
-        /// Calculates the next level based on a geometric distribution
-        /// (50% for 1, 25% for 2, 12.5% for 3, etc.)
-        /// using a direct mathematical formula.
-        /// Ignores probabilty variable and assumes 50% chances
-        /// </summary>
-        /// <returns>The calculated level, bounded between 1 and the min of MAX_LEVEL and _currentMaxLevel + 1.</returns>
         private int _getNextLevelFunctional()
         {
             double u = _random.NextDouble();
@@ -369,6 +384,45 @@ namespace SkipList
             int level = (int)(Math.Log(u) / Math.Log(PROBABILITY)) + 1;
 
             return Math.Min(level, max_value);
+        }
+
+        internal SkipListNode<T>[] GetDebugViewArray()
+        {
+            SkipListNode<T>[] skipListNodes = new SkipListNode<T>[_count + 1];
+            SkipListNode<T> currentNode = _head;
+            skipListNodes[0] = _head;
+            int currentIndex = 1;
+
+            while (currentNode.ForwardNodes[0] is not null && currentNode.ForwardNodes[0] != _head)
+            {
+                currentNode = currentNode.ForwardNodes[0];
+                skipListNodes[currentIndex] = currentNode;
+                currentIndex++;
+            }
+          
+            return skipListNodes;
+        }
+    }
+
+    // internal debug view class for skip list
+    internal sealed class SkipListDebugView<T> where T : IComparable<T>
+    {
+        private readonly SkipList<T> _skipList;
+
+        public SkipListDebugView(SkipList<T> sortedList)
+        {
+            ArgumentNullException.ThrowIfNull(sortedList);
+
+            _skipList = sortedList;
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+        public SkipListNode<T>[] Items
+        {
+            get
+            {
+                return _skipList.GetDebugViewArray();
+            }
         }
     }
 }

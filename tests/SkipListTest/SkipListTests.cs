@@ -177,5 +177,36 @@ namespace SkipListTest
                 Assert.Fail(ex.Message);
             }
         }
+
+        [Fact]
+        public void List_ShouldBeIndexable_AfterAddingElements()
+        {
+            int[] ints = { 1, 25, 25, 62, 26, 1, 6, 7, 8 };
+            SkipList<int> list = new SkipList<int>();
+            List<int> expected = new List<int>(ints);
+
+            foreach (int element in ints)
+            {
+                list.Add(element);
+            }
+
+            expected.Sort();
+
+            for(int i = 0; i < ints.Length; i++)
+            {
+                Assert.Equal(expected[i], list[i]);
+            }
+        }
+
+        [Fact]
+        public void List_ShouldNotBeIndexable_WhenEmpty()
+        {
+            int[] ints = { };
+            SkipList<int> list = new SkipList<int>();
+            List<int> expected = new List<int> { };
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => expected[0]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => list[0]);
+        }
     }
 }
