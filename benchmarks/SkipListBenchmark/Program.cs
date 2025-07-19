@@ -7,7 +7,7 @@ namespace SkipListBenchmark
     {
         static void Main(string[] args)
         {
-            var summary = BenchmarkRunner.Run<GetNextLevelBenchmarks>();
+            var summary = BenchmarkRunner.Run<SortedSetVsSkipListBenchmarks>();
         }
     }
 }

@@ -7,11 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkipList", "src\SkipList\Sk
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SkipLists", "SkipLists", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Collections", "Collections", "{CA781A2F-4A74-4256-82E4-524F2A9AE03A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkipListBenchmark", "benchmarks\SkipListBenchmark\SkipListBenchmark.csproj", "{0DD406B8-2550-4E07-88C7-0951A2867716}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkipListTest", "tests\SkipListTest\SkipListTest.csproj", "{F06AB2D1-3462-448A-B6C1-2AEDE53A608B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkipList.Test", "tests\SkipList.Test\SkipList.Test.csproj", "{F06AB2D1-3462-448A-B6C1-2AEDE53A608B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,7 +35,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1BBC83ED-8FE1-4D2F-8FEE-AF84C766ADC5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {CA781A2F-4A74-4256-82E4-524F2A9AE03A}
 		{0DD406B8-2550-4E07-88C7-0951A2867716} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{F06AB2D1-3462-448A-B6C1-2AEDE53A608B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
